@@ -7,7 +7,7 @@ import * as bodyParser from 'body-parser';
 
 const app = express();
 
-const allowedDomains = [network.FRONTEND_URL, 'http://localhost:4200'];
+const allowedDomains = [network.FRONTEND_URL, 'https://task-management-backend-b1c2.onrender.com'];
 
 app.use(cookieParser());
 app.use(express.json({ limit: '50mb' }));
