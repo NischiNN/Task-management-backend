@@ -9,6 +9,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   comparePassword(password: string): Promise<boolean>;
+  isModified(s: string): boolean
 }
 
 const userSchema = new mongoose.Schema({

@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import UserDAO from '../dao/User';
 import { Response } from 'express';
 import network from '../config/network';
+import { Types } from 'mongoose';
 
 const JWT_SECRET = network.JWT_SECRET;
 const JWT_EXPIRES_IN = network.JWT_EXPIRATION || '7d';
@@ -14,15 +15,22 @@ export default class UserService {
     if (existingUser) {
       throw new Error('User already exists');
     }
-    
+
     const user = await UserDAO.create({ name, email, password });
-    console.log(user, name, email, password)
+    console.log(user, name, email, password);
     return user;
   }
 
   // Login — set JWT in cookie
   static async login(email: string, password: string, res: Response) {
-    const user = (await UserDAO.findByEmail(email));
+    const user = (await UserDAO.findByEmail(email)) as unknown as {
+      id: string;
+      name: string;
+      email: string;
+      password: string;
+    } & {
+      _id: Types.ObjectId;
+    } & { comparePassword: (s: string) => Promise<boolean> };
     if (!user) {
       throw new Error('User not found');
     }
